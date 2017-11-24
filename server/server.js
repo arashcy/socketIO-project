@@ -12,12 +12,23 @@ var server = http.createServer(app);
 //enable server and client communication
 var io = socketIO(server);
 
-//gets called a connection between server and client
+//gets called when a connection between server and client is created
 io.on('connection', function(socket){
     console.log('new user connected');
+    socket.emit('newMessage', {
+      from: 'admin',
+      message: 'welcome',
+      createdAt: new Date().getTime()
+    })
+    socket.broadcast.emit('newMessage', {
+      from: 'admin',
+      message: 'New user joined',
+      createdAt: new Date().getTime()
+    })
     socket.on('disconnect', () => {
       console.log("user disconnected from server");
     });
+
 
     // listens for a createMessage event from client
     socket.on('createMessage', (message) => {
