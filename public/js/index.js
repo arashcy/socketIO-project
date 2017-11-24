@@ -13,8 +13,4 @@ socket.on('newMessage', (message) => {
   console.log('newMessage', message);
 })
 
-  //Emits an event for server to listen on
-socket.emit('createMessage', {
-  to: '@example.com',
-  text: 'text'
-})
+  

@@ -14,21 +14,23 @@ var io = socketIO(server);
 
 //gets called a connection between server and client
 io.on('connection', function(socket){
-  console.log('new user connected');
+    console.log('new user connected');
+    socket.on('disconnect', () => {
+      console.log("user disconnected from server");
+    });
 
-  socket.on('disconnect', () => {
-    console.log("user disconnected from server");
-  });
-  // listens for a createMessage event from client
-  socket.on('createMessage', (message) => {
-    console.log('create message', message);
+    // listens for a createMessage event from client
+    socket.on('createMessage', (message) => {
+      console.log('create message', message);
+      io.emit('newMessage', {   //emits an event for all users
+        from: message.from,
+        text: message.text,
+        createdAt: new Date().getTime
+      })
   })
 
-  //emits an event for client to listen for
-  socket.emit('newMessage', {
-    from: '@example.com',
-    text: 'text'
-  });
+
+
 });
 
 app.use(express.static(publicPath));
