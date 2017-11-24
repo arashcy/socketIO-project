@@ -12,10 +12,22 @@ var server = http.createServer(app);
 //enable server and client communication
 var io = socketIO(server);
 
+//gets called a connection between server and client
 io.on('connection', function(socket){
   console.log('new user connected');
+
   socket.on('disconnect', () => {
     console.log("user disconnected from server");
+  });
+  // listens for a createMessage event from client
+  socket.on('createMessage', (message) => {
+    console.log('create message', message);
+  })
+
+  //emits an event for client to listen for
+  socket.emit('newMessage', {
+    from: '@example.com',
+    text: 'text'
   });
 });
 
